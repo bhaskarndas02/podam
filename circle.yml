@@ -6,21 +6,14 @@ machine:
     version: oraclejdk8
     dependencies:
   override:
-    - java -XX:+PrintFlagsFinal -version
-    - mvn --version
-    - mvn clean 
-    - mvn test-compile --fail-never --update-snapshots --settings .travis.settings.xml -e
-    cache_directories:
-    - ~/.zinc
+    - mvn -DskipTests clean install dependency:resolve-plugins dependency:go-offline
 
-general:
-   artifacts:
-     - $CIRCLE_TEST_REPORTS
-     - target
-     
 test:
   override:
-    - mvn verify --settings .travis.settings.xml -e
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/target/failsafe-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - mvn -o surefire:test
+
+deployment:
+  main:
+    branch: master
+    commands:
+      - mvn -s .circleci.settings.xml -DskipTests deploy
