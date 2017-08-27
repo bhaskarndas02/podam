@@ -1,6 +1,17 @@
 machine:
-  ruby:
-    version: rbx-2.2.6
+
+  environment:
+    _JAVA_OPTIONS: "-Xms512m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=256m"
+  java:
+    version: oraclejdk8
+    dependencies:
+  override:
+    - java -XX:+PrintFlagsFinal -version
+    - mvn --version
+    - mvn clean 
+    - mvn test-compile --fail-never --update-snapshots --settings .travis.settings.xml -e
+    cache_directories:
+    - ~/.zinc
 
 general:
    artifacts:
@@ -9,7 +20,7 @@ general:
      
 test:
   override:
-    - mvn --fail-never dependency:go-offline || true
+    - mvn verify --settings .travis.settings.xml -e
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/target/failsafe-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
