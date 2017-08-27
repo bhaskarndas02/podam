@@ -55,7 +55,9 @@ scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/content/${m
 <maven.site.path>plugins-archives/${project.artifactId}-LATEST</maven.site.path>
 </properties>
 <dependencies>
+	
 <!--  maven  -->
+	
 <dependency>
 <groupId>org.apache.maven</groupId>
 <artifactId>maven-artifact</artifactId>
@@ -384,6 +386,18 @@ scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/content/${m
 			</extension>
 		</extensions>
 		<plugins>
+			<plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.10</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.eclipse.mylyn.github</groupId>
+                            <artifactId>org.eclipse.egit.github.core</artifactId>
+                            <version>2.1.5</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
